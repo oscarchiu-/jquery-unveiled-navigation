@@ -14,6 +14,37 @@
         var scrollDirection         = 1;
         var top                     = 0;
         var unveilTimeout           = undefined;
+        
+        // DETECT CSS 3D TRANSFORMS
+        var hasCssTransforms = function() {
+		    if (!window.getComputedStyle) {
+		        return false;
+		    }
+		
+		    var el = document.createElement('p'), 
+		        has3d,
+		        transforms = {
+		            'webkitTransform':'-webkit-transform',
+		            'OTransform':'-o-transform',
+		            'msTransform':'-ms-transform',
+		            'MozTransform':'-moz-transform',
+		            'transform':'transform'
+		        };
+		
+		    // Add it to the body to get the computed style.
+		    document.body.insertBefore(el, null);
+		
+		    for (var t in transforms) {
+		        if (el.style[t] !== undefined) {
+		            el.style[t] = "translate3d(1px,1px,1px)";
+		            has3d = window.getComputedStyle(el).getPropertyValue(transforms[t]);
+		        }
+		    }
+		
+		    document.body.removeChild(el);
+		
+		    return (has3d !== undefined && has3d.length > 0 && has3d !== "none");
+		}
 
 
         /********************************/
@@ -106,8 +137,13 @@
                 $this.removeClass(opts.topClass);
             }
 
-            // Asign new position
-            $this.css({ top: newTop });
+            // Assign new position
+            if (hasCssTransforms) {
+	            $this.css({ transform: "translate3d(0," + newTop + "px, 0)" });
+	            console.log(newTop);
+	        } else {
+	            $this.css({ top: newTop });
+	        }
 
 
             // Update memory
