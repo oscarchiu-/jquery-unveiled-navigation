@@ -45,7 +45,17 @@
 		
 		    return (has3d !== undefined && has3d.length > 0 && has3d !== "none");
 		}
-
+		
+		// DETECT REQUESTANIMATIONFRAME
+		
+		window.requestAnimFrame = (function(){
+			return window.requestAnimationFrame       ||
+				window.webkitRequestAnimationFrame    ||
+				window.mozRequestAnimationFrame       ||
+				function( callback ){
+				window.setTimeout(callback, 1000 / 60);
+			};
+		})();
 
         /********************************/
         /* PRIVATE FUNCTIONS            */
@@ -56,7 +66,11 @@
         };
 
         var initListeners = function(){
-            $(window).on('scroll', onWindowScroll);
+	        
+	        requestAnimFrame(function(){
+	            $(window).on('scroll', onWindowScroll);
+	        });
+	        
             onWindowScroll();
         };
 
