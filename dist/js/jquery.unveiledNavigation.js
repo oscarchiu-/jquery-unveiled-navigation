@@ -66,11 +66,7 @@
         };
 
         var initListeners = function(){
-	        
-	        requestAnimFrame(function(){
-	            $(window).on('scroll', onWindowScroll);
-	        });
-	        
+            $(window).on('scroll', onWindowScroll);
             onWindowScroll();
         };
 
@@ -152,11 +148,14 @@
             }
 
             // Assign new position
-            if (hasCssTransforms) {
-	            $this.css({ transform: "translate3d(0," + newTop + "px, 0)" });
-	        } else {
-	            $this.css({ top: newTop });
-	        }
+            
+            requestAnimFrame(function(){
+	            if (hasCssTransforms) {
+		            $this.css({ transform: "translate3d(0," + newTop + "px, 0)" });
+		        } else {
+		            $this.css({ top: newTop });
+		        }
+	        });
 
 
             // Update memory
