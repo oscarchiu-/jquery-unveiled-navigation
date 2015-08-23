@@ -140,7 +140,6 @@
             // Assign new position
             if (hasCssTransforms) {
 	            $this.css({ transform: "translate3d(0," + newTop + "px, 0)" });
-	            console.log(newTop);
 	        } else {
 	            $this.css({ top: newTop });
 	        }
